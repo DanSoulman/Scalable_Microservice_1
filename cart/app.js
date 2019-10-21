@@ -44,8 +44,7 @@ app.post("/add", function (req, res, next) {
         if(item.productID == obj.productID){// If there is a duplicate just edit info
             duplicateItem = true;
             console.log("Duplicate Item detected!"); 
-            item.quantity = parseInt(item.quantity) + parseInt(obj.quantity)
-            item.price = item.price + obj.price;          
+            item.quantity = parseInt(item.quantity) + parseInt(obj.quantity)     
         }
     });
     //If item has no duplicate put it in as a new item
