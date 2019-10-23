@@ -159,17 +159,20 @@
         }
 
         function deleteCartItem(count) {
-            $.post(
-                "/delete", {
-                    cnt: count
-                },
-                function (data) {
-
+            console.log("Test");
+            $.ajax({
+                type: 'DELETE',
+                url: '/cart/' + count,
+                data: {id: count},
+            })
+            .done(function(result) {
+                if(result.success){
+                    alert('Done deleting');
+                    window.location.reload();
                 }
-            );
+            });
 
         }
-
         function myFunction(itemNo) {
             str = JSON.stringify(products[itemNo]);
             window.alert("You selected " + str);

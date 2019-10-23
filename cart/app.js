@@ -18,12 +18,16 @@ app.post("/add", function (req, res, next) {
     console.log("Attempting to add to cart: " + JSON.stringify(req.body));
     var max = 0;
     var ind = 0;
+
+    console.log(cart);
     if (cart["" + obj.custId] === undefined)
         cart["" + obj.custId] = [];
+        
     var c = cart["" + obj.custId];
     for (ind = 0; ind < c.length; ind++)
         if (max < c[ind].cartid)
             max = c[ind].cartid;
+
     var cartid = max + 1;
     var data = {
         "cartid": cartid,
@@ -37,14 +41,13 @@ app.post("/add", function (req, res, next) {
     //PART 4 A: Combine items in card.
     console.log(JSON.stringify(data));
     var duplicateItem = false; //Boolean to decide if the item should be added or updated.
-    //Check for duplicate
-    //console.log("c is "+ JSON.stringify(c))
+   
     c.forEach(item => {
         //console.log("item is " + JSON.stringify(item))
         if(item.productID == obj.productID){// If there is a duplicate just edit info
             duplicateItem = true;
             console.log("Duplicate Item detected!"); 
-            item.quantity = parseInt(item.quantity) + parseInt(obj.quantity)     
+            item.quantity = parseInt(item.quantity) + parseInt(obj.quantity)              
         }
     });
     //If item has no duplicate put it in as a new item
@@ -56,52 +59,29 @@ app.post("/add", function (req, res, next) {
     res.send("");
 });
 
-//TODO: 
+//PART 4: Fix Delete.
 app.delete("/cart/:custId/items/:id", function (req, res, next) {
-/*    var obj = req.body;
-    console.log("DELETE ");
-    console.log("Attempting to remove from cart: " + JSON.stringify(req.body));
-    var max = 0;
-    var ind = 0;
-    if (cart["" + obj.custId] === undefined)
-        cart["" + obj.custId] = [];
-    var c = cart["" + obj.custId];
-    for (ind = 0; ind < c.length; ind++)
-        if (max < c[ind].cartid)
-            max = c[ind].cartid;
-    var cartid = max + 1;
-    var data = {
-        "cartid": cartid,
-        "productID": obj.productID,
-        "name": obj.name,
-        "price": obj.price,
-        "image": obj.image,
-        "quantity": obj.quantity
-    };
+    //var tempCart = cart;
+    console.log("DELETE FUNCTION");
 
-    //PART 4: Combine items in card.
-    console.log(JSON.stringify(data));
-    //console.log("c is "+ JSON.stringify(c))
-    c.forEach(item, index => {
-        //console.log("item is " + JSON.stringify(item))
-        if(item.productID == obj.productID){// If there is a duplicate just edit info
-            if(item.quantity > 1){
-                item.quantity = item.quantity - 1;
-                item.price = item.price - obj.price;
-            }else if(item.quantity == 1){
+    var custId = req.params.custId; //Grabs the Cust ID from the URL 
+    if (cart["" + custId] === undefined)
+        cart["" + custId] = [];
+
+    var c = cart["" + custId];
+    
+    c.forEach((item, index) => { 
+        console.log("item is " + JSON.stringify(item))
+        if(item.productID == req.params.id){ 
+            if(parseInt(item.quantity) > 1){ //Removes one from the quantity
+                item.quantity = parseInt(item.quantity) - 1;
+            }else if(item.quantity == 1){ //Removes item if it's the only one
                 c.splice(index,1);
             }
-
         }
     });
     console.log(JSON.stringify(c));
     res.status(201);
-    res.send("");*/
-    var body = '';
-    console.log("Delete item from cart: for custId " + req.url + ' ' +
-        req.params.id.toString());
-    console.log("delete");
-    
     res.send(' ');
 });
 
