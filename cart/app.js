@@ -43,7 +43,6 @@ app.post("/add", function (req, res, next) {
     var duplicateItem = false; //Boolean to decide if the item should be added or updated.
    
     c.forEach(item => {
-        //console.log("item is " + JSON.stringify(item))
         if(item.productID == obj.productID){// If there is a duplicate just edit info
             duplicateItem = true;
             console.log("Duplicate Item detected!"); 
@@ -62,8 +61,6 @@ app.post("/add", function (req, res, next) {
 //PART 4: Fix Delete.
 app.delete("/cart/:custId/items/:id", function (req, res, next) {
     //var tempCart = cart;
-    console.log("DELETE FUNCTION");
-
     var custId = req.params.custId; //Grabs the Cust ID from the URL 
     if (cart["" + custId] === undefined)
         cart["" + custId] = [];
